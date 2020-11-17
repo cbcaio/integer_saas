@@ -1,0 +1,19 @@
+name: quality-gate
+
+# Run this workflow every time a new commit pushed to your repository
+on: push
+
+jobs:
+  style-check:
+    name: Lint code base
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js dependencies
+        run: npm install
+
+      - name: Run a one-line script
+        run: npm run lint
