@@ -1,0 +1,27 @@
+{
+  "name": "integer_saas",
+  "version": "1.0.0",
+  "description": "Incrementing Integers As A Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cbcaio/integer_saas.git"
+  },
+  "author": "Caio Ceccon Bolognani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cbcaio/integer_saas/issues"
+  },
+  "homepage": "https://github.com/cbcaio/integer_saas#readme",
+  "devDependencies": {
+    "eslint": "^7.13.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2"
+  }
+}
