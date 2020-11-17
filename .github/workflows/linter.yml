@@ -17,6 +17,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Node.js dependencies
+        run: npm install
+
         # Runs a single command using the runners shell
       - name: Run a one-line script
         run: npm run lint
