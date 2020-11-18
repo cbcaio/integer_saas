@@ -1,14 +1,28 @@
 class User {
   constructor(args) {
-    if (!args.email) {
-      throw new Error('User must have an email');
-    }
-    this.email = args.email;
-    this.password = args.password;
+    const { id = null, username, password = null } = args;
+
+    User.isValidUser(args);
+
+    this.id = id;
+    this.username = username;
+    this.password = password;
+  }
+
+  static isValidUser(args) {
+    if (!args.username) throw new Error('User must have username');
   }
 
   getId() {
-    return this.email;
+    return this.id;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      username: this.username,
+      password: this.password
+    };
   }
 }
 
