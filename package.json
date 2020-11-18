@@ -1,0 +1,39 @@
+{
+  "name": "integer_saas",
+  "version": "1.0.0",
+  "description": "Incrementing Integers As A Service",
+  "main": "index.js",
+  "scripts": {
+    "commit": "cz",
+    "lint": "eslint --fix --ext .js .",
+    "unit-test:watch": "jest . --watch-all",
+    "unit-test": "jest ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cbcaio/integer_saas.git"
+  },
+  "author": "Caio Ceccon Bolognani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cbcaio/integer_saas/issues"
+  },
+  "homepage": "https://github.com/cbcaio/integer_saas#readme",
+  "devDependencies": {
+    "commitizen": "^4.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^7.13.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.6.3",
+    "prettier": "^2.1.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
