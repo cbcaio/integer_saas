@@ -7,7 +7,7 @@
     "commit": "cz",
     "lint": "eslint --fix --ext .js .",
     "unit-test:watch": "jest . --watch-all",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "unit-test": "jest ."
   },
   "repository": {
     "type": "git",

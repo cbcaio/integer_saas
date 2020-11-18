@@ -2,11 +2,10 @@
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-*Please do not supply your name or email address in this document. We're doing our best to remain unbiased.*
 
 ### Date
 
-The date you're submitting this.
+
 
 ### Location of deployed application
 
@@ -14,8 +13,7 @@ If applicable, please provide the url where we can find and interact with your r
 
 ### Time spent
 
-How much time did you spend on the assignment? Normally, this is expressed in hours.
-start date: 17/12 at 7pm
+start date: 17/12 at 7pm | stop date: 10 pm -> total 3h
 
 ### Assumptions made
 
@@ -33,7 +31,12 @@ could have done better? If you didn't attempt any of the stretch goals, feel fre
 
 ### Instructions to run assignment locally
 
-If applicable, please provide us with the necessary instructions to run your solution.
+#### To run Unit Tests locally (from project root folder)
+
+```console
+  npm install
+  npm run test
+```
 
 ### What did you not include in your solution that you want us to know about?
 
