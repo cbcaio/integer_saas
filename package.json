@@ -35,5 +35,9 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "knex": "^0.21.12"
   }
 }
