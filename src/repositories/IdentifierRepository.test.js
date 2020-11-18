@@ -31,7 +31,7 @@ describe('IdentifierRepository', () => {
     });
 
     const userExample = new User({
-      email: 'someone@somewhere.com'
+      id: 'someone@somewhere.com'
     });
 
     it('should return a promise if called with correct args', () => {
@@ -43,7 +43,7 @@ describe('IdentifierRepository', () => {
     it('should throw if invalid user was provided', async () => {
       await expect(async () => {
         await repositoryInstance.getIdentifierByUser({});
-      }).rejects.toThrow('User must have an email');
+      }).rejects.toThrow('User must have an unique id');
     });
 
     it('should query from identifierTable', async () => {
