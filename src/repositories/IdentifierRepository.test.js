@@ -134,7 +134,7 @@ describe('IdentifierRepository', () => {
 
         expect(mockWhere.where).toHaveBeenCalledTimes(1);
         expect(mockWhere.where).toHaveBeenLastCalledWith(
-          repositoryInstance.identifierPrimaryKey,
+          repositoryInstance.primaryKey,
           identifierExample.getId()
         );
       });

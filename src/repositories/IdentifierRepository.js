@@ -12,7 +12,7 @@ class IdentifierRepository {
     this.queryBuilder = queryBuilder;
 
     this.identifierTable = 'user_identifier';
-    this.identifierPrimaryKey = 'id';
+    this.primaryKey = 'id';
     this.identifierCurrentValueColumn = 'current';
     this.userForeignKey = 'user_id';
   }
@@ -36,7 +36,7 @@ class IdentifierRepository {
     if (identifier.hasId()) {
       return this.queryBuilder
         .table(this.identifierTable)
-        .where(this.identifierPrimaryKey, identifierModel.getId())
+        .where(this.primaryKey, identifierModel.getId())
         .update(
           this.identifierCurrentValueColumn,
           identifierModel.getCurrentIdentifier()
