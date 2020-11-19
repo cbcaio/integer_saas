@@ -1,11 +1,17 @@
 const { knexInstance } = require('../database');
 
-const IdentifierRepository = require('./IdentifierRepository');
 const UserRepository = require('./UserRepository');
+const UserRepositoryKnex = require('./UserRepositoryKnex');
+
+const IdentifierRepository = require('./IdentifierRepository');
+const IdentifierRepositoryKnex = require('./IdentifierRepositoryKnex');
+
+const queryBuilderIdentifier = new IdentifierRepositoryKnex(knexInstance);
+const queryBuilderUser = new UserRepositoryKnex(knexInstance);
 
 module.exports = {
   identifierRepository: new IdentifierRepository({
-    queryBuilder: knexInstance
+    queryBuilder: queryBuilderIdentifier
   }),
-  userRepository: new UserRepository({ queryBuilder: knexInstance })
+  userRepository: new UserRepository({ queryBuilder: queryBuilderUser })
 };

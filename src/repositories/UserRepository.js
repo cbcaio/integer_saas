@@ -9,34 +9,24 @@ class UserRepository {
     }
 
     this.queryBuilder = queryBuilder;
-
-    this.userTable = 'users';
-    this.primaryKey = 'id';
   }
 
   async saveUser(user) {
     const userInstance = new User(user);
 
-    return this.queryBuilder
-      .table(this.userTable)
-      .insert(userInstance.toJSON());
+    const userId = await this.queryBuilder.insertUser(userInstance);
+
+    return userId;
   }
 
   async getUser(username, password) {
-    return this.queryBuilder
-      .table(this.userTable)
-      .select()
-      .where('username', username)
-      .andWhere('password', password);
+    return this.queryBuilder.verifyUser(username, password);
   }
 
   async isValidUser(username) {
-    const users = await this.queryBuilder
-      .table(this.userTable)
-      .select()
-      .where('username', username);
+    const user = await this.queryBuilder.findUser(username);
 
-    return users.length > 0;
+    return !!user;
   }
 }
 

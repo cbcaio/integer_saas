@@ -10,20 +10,14 @@ class IdentifierRepository {
     }
 
     this.queryBuilder = queryBuilder;
-
-    this.identifierTable = 'user_identifier';
-    this.primaryKey = 'id';
-    this.identifierCurrentValueColumn = 'current';
-    this.userForeignKey = 'user_id';
   }
 
   async getIdentifierByUser(user) {
-    const userModel = new User(user);
+    const userInstance = new User(user);
 
-    const identifierRaw = await this.queryBuilder
-      .select()
-      .from(this.identifierTable)
-      .where(this.userForeignKey, userModel.getId());
+    const identifierRaw = await this.queryBuilder.findIdentifierByUser(
+      userInstance
+    );
 
     const identifierModel = new IdentifierModel(identifierRaw);
 
@@ -34,18 +28,10 @@ class IdentifierRepository {
     const identifierModel = new IdentifierModel(identifier);
 
     if (identifier.hasId()) {
-      return this.queryBuilder
-        .table(this.identifierTable)
-        .where(this.primaryKey, identifierModel.getId())
-        .update(
-          this.identifierCurrentValueColumn,
-          identifierModel.getCurrentIdentifier()
-        );
+      return this.queryBuilder.updateIdenfitier(identifierModel);
     }
 
-    return this.queryBuilder
-      .insert(identifierModel.toJSON())
-      .into(this.identifierTable);
+    return this.queryBuilder.insertIdentifier(identifier);
   }
 }
 

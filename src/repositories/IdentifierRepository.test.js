@@ -7,6 +7,12 @@ beforeEach(() => {
 });
 
 describe('IdentifierRepository', () => {
+  const mockQueryBuilder = {
+    findIdentifierByUser: jest.fn(),
+    updateIdenfitier: jest.fn(),
+    insertIdentifier: jest.fn()
+  };
+
   it('should be possible to instantiate the repository with a query builder', () => {
     expect(() => new IdentifierRepository({ queryBuilder: {} })).not.toThrow();
   });
@@ -18,14 +24,6 @@ describe('IdentifierRepository', () => {
   });
 
   describe('testing getIdentifierByUser', () => {
-    const mockWhere = { where: jest.fn() };
-    const mockFrom = { from: jest.fn(() => mockWhere) };
-    const mockSelect = { select: jest.fn(() => mockFrom) };
-
-    const mockQueryBuilder = {
-      ...mockSelect
-    };
-
     const repositoryInstance = new IdentifierRepository({
       queryBuilder: mockQueryBuilder
     });
@@ -46,30 +44,15 @@ describe('IdentifierRepository', () => {
       }).rejects.toThrow();
     });
 
-    it('should query from identifierTable', async () => {
-      await repositoryInstance.getIdentifierByUser(userExample);
-
-      expect(mockFrom.from).toHaveBeenLastCalledWith(
-        repositoryInstance.identifierTable
-      );
-    });
-
-    it('should create where clause using userForeignKey and user.getId', async () => {
-      await repositoryInstance.getIdentifierByUser(userExample);
-
-      expect(mockWhere.where).toHaveBeenLastCalledWith(
-        repositoryInstance.userForeignKey,
-        userExample.getId()
-      );
-    });
-
     it('should return an Identifier instance with queried user', async () => {
       const rawIdentifierProperties = {
         id: 10,
         currentIdentifier: 10
       };
 
-      mockWhere.where.mockResolvedValueOnce(rawIdentifierProperties);
+      mockQueryBuilder.findIdentifierByUser.mockResolvedValueOnce(
+        rawIdentifierProperties
+      );
 
       const result = await repositoryInstance.getIdentifierByUser(userExample);
 
@@ -79,17 +62,6 @@ describe('IdentifierRepository', () => {
   });
 
   describe('testing saveIdentifier', () => {
-    const mockUpdate = { update: jest.fn() };
-    const mockWhere = { where: jest.fn(() => mockUpdate) };
-    const mockTable = { table: jest.fn(() => mockWhere) };
-    const mockInto = { into: jest.fn() };
-    const mockInsert = { insert: jest.fn(() => mockInto) };
-
-    const mockQueryBuilder = {
-      ...mockTable,
-      ...mockInsert
-    };
-
     const repositoryInstance = new IdentifierRepository({
       queryBuilder: mockQueryBuilder
     });
@@ -109,34 +81,11 @@ describe('IdentifierRepository', () => {
         currentIdentifier: 2
       });
 
-      it('should save in the identifierTable', async () => {
-        await repositoryInstance.saveIdentifier(identifierExample);
-
-        expect(mockTable.table).toHaveBeenCalledTimes(1);
-        expect(mockTable.table).toHaveBeenLastCalledWith(
-          repositoryInstance.identifierTable
-        );
-      });
-
       it('should save identifier using update and not insert', async () => {
         await repositoryInstance.saveIdentifier(identifierExample);
 
-        expect(mockUpdate.update).toHaveBeenCalledTimes(1);
-        expect(mockInsert.insert).toHaveBeenCalledTimes(0);
-        expect(mockUpdate.update).toHaveBeenLastCalledWith(
-          repositoryInstance.identifierCurrentValueColumn,
-          identifierExample.getCurrentIdentifier()
-        );
-      });
-
-      it('should update identifier with same id', async () => {
-        await repositoryInstance.saveIdentifier(identifierExample);
-
-        expect(mockWhere.where).toHaveBeenCalledTimes(1);
-        expect(mockWhere.where).toHaveBeenLastCalledWith(
-          repositoryInstance.primaryKey,
-          identifierExample.getId()
-        );
+        expect(mockQueryBuilder.updateIdenfitier).toHaveBeenCalledTimes(1);
+        expect(mockQueryBuilder.insertIdentifier).toHaveBeenCalledTimes(0);
       });
     });
 
@@ -146,21 +95,11 @@ describe('IdentifierRepository', () => {
         currentIdentifier: 2
       });
 
-      it('should save in the identifierTable', async () => {
-        await repositoryInstance.saveIdentifier(identifierExample);
-
-        expect(mockInto.into).toHaveBeenCalledTimes(1);
-        expect(mockInto.into).toHaveBeenLastCalledWith(
-          repositoryInstance.identifierTable
-        );
-      });
-
       it('should save identifier using insert and not update', async () => {
         await repositoryInstance.saveIdentifier(identifierExample);
 
-        expect(mockUpdate.update).toHaveBeenCalledTimes(0);
-        expect(mockInsert.insert).toHaveBeenCalledTimes(1);
-        expect(mockInsert.insert).toHaveBeenLastCalledWith(identifierExample);
+        expect(mockQueryBuilder.updateIdenfitier).toHaveBeenCalledTimes(0);
+        expect(mockQueryBuilder.insertIdentifier).toHaveBeenCalledTimes(1);
       });
     });
   });
