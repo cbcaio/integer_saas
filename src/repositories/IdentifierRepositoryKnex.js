@@ -6,31 +6,41 @@ class IdentifierRepositoryKnex {
 
     this.knex = knexInstance;
 
-    this.primaryKey = 'id';
-    this.identifierTable = 'user_identifier';
-    this.identifierCurrentValueColumn = 'current';
-    this.userForeignKey = 'user_id';
+    this.identifierTable = 'identifiers';
   }
 
-  async findIdentifierByUser(user) {
+  async getIdentifierByUser(userId) {
     return this.knex
       .select()
       .from(this.identifierTable)
-      .where(this.userForeignKey, user.getId());
+      .where('user_id', userId)
+      .first();
   }
 
   async updateIdenfitier(identifier) {
     return this.knex
       .table(this.identifierTable)
-      .where(this.primaryKey, identifier.getId())
-      .update(
-        this.identifierCurrentValueColumn,
-        identifier.getCurrentIdentifier()
-      );
+      .where('id', identifier.getId())
+      .andWhere('current', identifier.getCurrentIdentifier())
+      .update('current', identifier.getNextIdentifier());
   }
 
   async insertIdentifier(identifier) {
-    return this.knex.insert(identifier.toJSON()).into(this.identifierTable);
+    return this.knex.transaction(async (trx) => {
+      const [identifierId] = await trx
+        .insert({
+          user_id: identifier.getUserId(),
+          current: identifier.getCurrentIdentifier()
+        })
+        .into(this.identifierTable);
+
+      const createdIdentifier = await trx
+        .table(this.identifierTable)
+        .where('id', identifierId)
+        .first();
+
+      return createdIdentifier;
+    });
   }
 }
 

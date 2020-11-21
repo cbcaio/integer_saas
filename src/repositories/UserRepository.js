@@ -1,12 +1,22 @@
 class UserRepository {
   constructor(args = {}) {
-    const { queryBuilder } = args;
+    const { queryBuilder, UserModel, OAuthTokenModel } = args;
 
     if (!queryBuilder) {
       throw new Error('Repository requires a queryBuilder to work');
     }
 
     this.queryBuilder = queryBuilder;
+    this.UserModel = UserModel;
+    this.OAuthTokenModel = OAuthTokenModel;
+  }
+
+  makeUser(args) {
+    return new this.UserModel(args);
+  }
+
+  makeOAuthToken(args) {
+    return new this.OAuthTokenModel(args);
   }
 
   async registerUser(userInstance, oAuthTokenInstance) {
