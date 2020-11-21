@@ -23,7 +23,7 @@ class OAuthToken {
   }
 
   static generateExpirationDate(seconds = 0) {
-    return DateTime.utc().plus({ seconds }).toString();
+    return DateTime.utc().plus({ seconds }).valueOf();
   }
 
   getUserId() {

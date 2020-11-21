@@ -1,10 +1,11 @@
 class Identifier {
   constructor(args = {}) {
-    const { id = null, currentIdentifier = 1 } = args;
+    const { id = null, userId, currentIdentifier = 1 } = args;
 
     Identifier.validateIdentifier(currentIdentifier);
 
     this.id = id;
+    this.userId = userId;
     this.currentIdentifier = currentIdentifier;
   }
 
@@ -14,6 +15,10 @@ class Identifier {
 
   getId() {
     return this.id;
+  }
+
+  getUserId() {
+    return this.userId;
   }
 
   getCurrentIdentifier() {
@@ -26,27 +31,10 @@ class Identifier {
     return nextIdentifier;
   }
 
-  setCurrentIdentifier(id) {
-    Identifier.validateIdentifier(id);
-
-    this.currentIdentifier = Number(id, 10);
-  }
-
-  static isIdentifierValid(id) {
-    return Number.isInteger(id) && id > 0;
-  }
-
   static validateIdentifier(id) {
-    if (!Identifier.isIdentifierValid(id)) {
+    if (!Number.isInteger(id)) {
       throw new Error('Invalid value for Identifier');
     }
-  }
-
-  toJSON() {
-    return {
-      id: this.id,
-      currentIdentifier: this.currentIdentifier
-    };
   }
 }
 
