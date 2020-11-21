@@ -6,10 +6,6 @@ const { identifierServices } = require('../../services');
 router.get('/current', async (req, res) => {
   const userId = req.authenticatedUser.id;
 
-  if (!userId) {
-    res.status(403).json({ message: 'Not Authenticated' });
-  }
-
   const currentIdentifier = await identifierServices.getCurrentUserIdenfifier(
     userId
   );
@@ -17,8 +13,16 @@ router.get('/current', async (req, res) => {
   res.status(200).json({ identifier: currentIdentifier });
 });
 
-router.put('/current', (req, res) => {
-  res.send('current');
+router.put('/current', async (req, res) => {
+  const userId = req.authenticatedUser.id;
+  const { current } = req.body;
+
+  const currentIdentifier = await identifierServices.setCurrentUserIdenfifier(
+    userId,
+    current
+  );
+
+  res.status(200).json({ identifier: currentIdentifier });
 });
 
 module.exports = router;

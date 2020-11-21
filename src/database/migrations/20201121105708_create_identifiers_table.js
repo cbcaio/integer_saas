@@ -5,7 +5,7 @@ exports.up = function (knex) {
     table.collate('utf8_general_ci');
 
     table.increments();
-    table.integer('user_id').unsigned().notNullable();
+    table.integer('user_id').unsigned().notNullable().unique();
     table.bigInteger('current').notNullable();
 
     table.foreign('user_id').references('id').inTable('users');

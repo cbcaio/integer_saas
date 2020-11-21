@@ -31,18 +31,16 @@ class IdentifierRepository {
   }
 
   async saveIdentifier(identifierInstance) {
-    if (identifierInstance.hasId()) {
-      return this.queryBuilder.updateIdenfitier(identifierInstance);
-    }
+    let rawIdentifier = null;
 
-    const rawIdentifier = await this.queryBuilder.insertIdentifier(
-      identifierInstance
-    );
+    rawIdentifier = identifierInstance.hasId()
+      ? await this.queryBuilder.updateIdentifier(identifierInstance)
+      : await this.queryBuilder.insertIdentifier(identifierInstance);
 
     return new this.IdentifierModel({
       id: rawIdentifier.id,
       userId: rawIdentifier.user_id,
-      current: rawIdentifier.current
+      currentIdentifier: rawIdentifier.current
     });
   }
 }

@@ -17,12 +17,20 @@ class IdentifierRepositoryKnex {
       .first();
   }
 
-  async updateIdenfitier(identifier) {
-    return this.knex
-      .table(this.identifierTable)
-      .where('id', identifier.getId())
-      .andWhere('current', identifier.getCurrentIdentifier())
-      .update('current', identifier.getNextIdentifier());
+  async updateIdentifier(identifier) {
+    return this.knex.transaction(async (trx) => {
+      const identifierId = await trx
+        .table(this.identifierTable)
+        .where('id', identifier.getId())
+        .update('current', identifier.getCurrentIdentifier());
+
+      const createdIdentifier = await trx
+        .table(this.identifierTable)
+        .where('id', identifierId)
+        .first();
+
+      return createdIdentifier;
+    });
   }
 
   async insertIdentifier(identifier) {

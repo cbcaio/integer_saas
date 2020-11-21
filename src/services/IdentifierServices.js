@@ -11,7 +11,26 @@ module.exports = ({ identifierRepository }) => {
     return identifier.getCurrentIdentifier();
   }
 
+  async function setCurrentUserIdenfifier(userId, identifierValue) {
+    const existentIdentifier = await identifierRepository.getIdentifierByUser(
+      userId
+    );
+
+    const newIdentifierInstance = identifierRepository.makeIdentifier({
+      id: existentIdentifier ? existentIdentifier.getId() : null,
+      userId,
+      currentIdentifier: identifierValue
+    });
+
+    const identifier = await identifierRepository.saveIdentifier(
+      newIdentifierInstance
+    );
+
+    return identifier.getCurrentIdentifier();
+  }
+
   return {
-    getCurrentUserIdenfifier
+    getCurrentUserIdenfifier,
+    setCurrentUserIdenfifier
   };
 };
