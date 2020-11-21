@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const registerUser = require('../../services/registerUser');
+const { registerUser } = require('../../services');
 
 function validateRequest(req, res, next) {
   try {
@@ -25,9 +25,9 @@ router.post('/register', validateRequest, async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
-    const userId = await registerUser(username, password);
+    const result = await registerUser(username, password);
 
-    res.status(201).json({ userId });
+    res.status(201).json(result);
   } catch (e) {
     if (e.message === 'User already exists') {
       res.status(409).json({ message: e.message });

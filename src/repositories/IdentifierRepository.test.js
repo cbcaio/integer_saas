@@ -29,7 +29,8 @@ describe('IdentifierRepository', () => {
     });
 
     const userExample = new User({
-      username: 'username'
+      username: 'username',
+      password: 'password'
     });
 
     it('should return a promise if called with correct args', () => {

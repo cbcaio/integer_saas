@@ -1,5 +1,3 @@
-const User = require('../domainModels/User');
-
 class UserRepository {
   constructor(args = {}) {
     const { queryBuilder } = args;
@@ -11,10 +9,11 @@ class UserRepository {
     this.queryBuilder = queryBuilder;
   }
 
-  async saveUser(user) {
-    const userInstance = new User(user);
-
-    const userId = await this.queryBuilder.insertUser(userInstance);
+  async registerUser(userInstance, oAuthTokenInstance) {
+    const userId = await this.queryBuilder.registerUser(
+      userInstance,
+      oAuthTokenInstance
+    );
 
     return userId;
   }
@@ -23,8 +22,8 @@ class UserRepository {
     return this.queryBuilder.verifyUser(username, password);
   }
 
-  async isValidUser(username) {
-    const user = await this.queryBuilder.findUser(username);
+  async isValidUser(userInstance) {
+    const user = await this.queryBuilder.findUser(userInstance.username);
 
     return !!user;
   }

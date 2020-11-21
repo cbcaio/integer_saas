@@ -7,8 +7,9 @@ const errorHandlerMiddleware = require('./errorHandlerMiddleware');
 const app = express();
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/v1', [resources.registerResourceRouter]);
+app.use('/auth', resources.registerResourceRouter);
 
 app.use('/v1', [resources.nextResourceRouter, resources.currentResourceRouter]);
 
