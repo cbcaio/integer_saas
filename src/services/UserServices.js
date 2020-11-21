@@ -1,9 +1,6 @@
-const User = require('../domainModels/User');
-const OAuthToken = require('../domainModels/OAuthToken');
-
 module.exports = ({ userRepository }) => {
   async function registerUser(username, password) {
-    const newUser = new User({
+    const newUser = userRepository.makeUser({
       username,
       password
     });
@@ -15,7 +12,9 @@ module.exports = ({ userRepository }) => {
     }
 
     const secondsInOneDay = 86400;
-    const accessToken = new OAuthToken({ expiresIn: secondsInOneDay });
+    const accessToken = userRepository.makeOAuthToken({
+      expiresIn: secondsInOneDay
+    });
     const result = await userRepository.registerUser(newUser, accessToken);
 
     return {
