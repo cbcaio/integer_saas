@@ -1,5 +1,4 @@
 const Identifier = require('../domainModels/Identifier');
-const User = require('../domainModels/User');
 const IdentifierRepository = require('./IdentifierRepository');
 
 beforeEach(() => {
@@ -8,8 +7,9 @@ beforeEach(() => {
 
 describe('IdentifierRepository', () => {
   const mockQueryBuilder = {
-    findIdentifierByUser: jest.fn(),
-    updateIdenfitier: jest.fn(),
+    getIdentifierByUser: jest.fn(),
+    saveNextIdentifier: jest.fn(),
+    updateIdentifier: jest.fn(),
     insertIdentifier: jest.fn()
   };
 
@@ -25,46 +25,42 @@ describe('IdentifierRepository', () => {
 
   describe('testing getIdentifierByUser', () => {
     const repositoryInstance = new IdentifierRepository({
-      queryBuilder: mockQueryBuilder
+      queryBuilder: mockQueryBuilder,
+      IdentifierModel: Identifier
     });
 
-    const userExample = new User({
-      username: 'username',
-      password: 'password'
+    it('should return a promise if called', () => {
+      expect(repositoryInstance.getIdentifierByUser(1)).toBeInstanceOf(Promise);
     });
 
-    it('should return a promise if called with correct args', () => {
-      expect(
-        repositoryInstance.getIdentifierByUser(userExample)
-      ).toBeInstanceOf(Promise);
+    it('should return false if invalid user was provided', async () => {
+      mockQueryBuilder.getIdentifierByUser.mockResolvedValueOnce(undefined);
+      const result = await repositoryInstance.getIdentifierByUser(1);
+
+      expect(result).toEqual(false);
     });
 
-    it('should throw if invalid user was provided', async () => {
-      await expect(async () => {
-        await repositoryInstance.getIdentifierByUser({});
-      }).rejects.toThrow();
-    });
-
-    it('should return an Identifier instance with queried user', async () => {
+    it('should return an Identifier instance', async () => {
       const rawIdentifierProperties = {
         id: 10,
         currentIdentifier: 10
       };
 
-      mockQueryBuilder.findIdentifierByUser.mockResolvedValueOnce(
+      mockQueryBuilder.getIdentifierByUser.mockResolvedValueOnce(
         rawIdentifierProperties
       );
 
-      const result = await repositoryInstance.getIdentifierByUser(userExample);
+      const result = await repositoryInstance.getIdentifierByUser(1);
 
       expect(result).toBeInstanceOf(Identifier);
-      expect(result.toJSON()).toEqual(rawIdentifierProperties);
+      expect(result).toEqual(rawIdentifierProperties);
     });
   });
 
   describe('testing saveIdentifier', () => {
     const repositoryInstance = new IdentifierRepository({
-      queryBuilder: mockQueryBuilder
+      queryBuilder: mockQueryBuilder,
+      IdentifierModel: Identifier
     });
 
     it('should return a promise if called with correct args', () => {
@@ -77,15 +73,14 @@ describe('IdentifierRepository', () => {
     });
 
     describe('if identifier has id', () => {
-      const identifierExample = new Identifier({
-        id: 100,
-        currentIdentifier: 2
-      });
-
       it('should save identifier using update and not insert', async () => {
+        const identifierExample = new Identifier({
+          id: 100,
+          currentIdentifier: 2
+        });
         await repositoryInstance.saveIdentifier(identifierExample);
 
-        expect(mockQueryBuilder.updateIdenfitier).toHaveBeenCalledTimes(1);
+        expect(mockQueryBuilder.updateIdentifier).toHaveBeenCalledTimes(1);
         expect(mockQueryBuilder.insertIdentifier).toHaveBeenCalledTimes(0);
       });
     });
@@ -99,9 +94,37 @@ describe('IdentifierRepository', () => {
       it('should save identifier using insert and not update', async () => {
         await repositoryInstance.saveIdentifier(identifierExample);
 
-        expect(mockQueryBuilder.updateIdenfitier).toHaveBeenCalledTimes(0);
+        expect(mockQueryBuilder.updateIdentifier).toHaveBeenCalledTimes(0);
         expect(mockQueryBuilder.insertIdentifier).toHaveBeenCalledTimes(1);
       });
+    });
+  });
+
+  describe('testing saveNextIdentifier', () => {
+    const repositoryInstance = new IdentifierRepository({
+      queryBuilder: mockQueryBuilder,
+      IdentifierModel: Identifier
+    });
+
+    it('should return a promise if called', () => {
+      expect(repositoryInstance.saveNextIdentifier()).toBeInstanceOf(Promise);
+    });
+
+    it('should return an Identifier instance', async () => {
+      const mockedCallResult = {
+        id: 1,
+        userId: 2,
+        currentIdentifier: 3
+      };
+
+      mockQueryBuilder.saveNextIdentifier.mockResolvedValueOnce(
+        mockedCallResult
+      );
+
+      const result = await repositoryInstance.saveNextIdentifier(1);
+
+      expect(result).toBeInstanceOf(Identifier);
+      expect(result).toEqual(mockedCallResult);
     });
   });
 });

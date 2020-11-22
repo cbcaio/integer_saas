@@ -15,44 +15,36 @@ class IdentifierRepository {
   }
 
   async getIdentifierByUser(userId) {
-    const identifierRaw = await this.queryBuilder.getIdentifierByUser(userId);
+    const identifier = await this.queryBuilder.getIdentifierByUser(userId);
 
-    if (!identifierRaw) {
+    if (!identifier) {
       return false;
     }
 
-    const identifierModel = new this.IdentifierModel({
-      id: identifierRaw.id,
-      userId: identifierRaw.user_id,
-      currentIdentifier: identifierRaw.current
-    });
+    const identifierModel = new this.IdentifierModel({ ...identifier });
 
     return identifierModel;
   }
 
   async saveIdentifier(identifierInstance) {
-    let rawIdentifier = null;
+    let identifier = null;
 
-    rawIdentifier = identifierInstance.hasId()
+    identifier = identifierInstance.hasId()
       ? await this.queryBuilder.updateIdentifier(identifierInstance)
       : await this.queryBuilder.insertIdentifier(identifierInstance);
 
     return new this.IdentifierModel({
-      id: rawIdentifier.id,
-      userId: rawIdentifier.user_id,
-      currentIdentifier: rawIdentifier.current
+      ...identifier
     });
   }
 
   async saveNextIdentifier(identifierInstance) {
-    const rawIdentifier = await this.queryBuilder.saveNextIdentifier(
+    const identifier = await this.queryBuilder.saveNextIdentifier(
       identifierInstance
     );
 
     return new this.IdentifierModel({
-      id: rawIdentifier.id,
-      userId: rawIdentifier.user_id,
-      currentIdentifier: rawIdentifier.current
+      ...identifier
     });
   }
 }

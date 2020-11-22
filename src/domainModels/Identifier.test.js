@@ -7,14 +7,8 @@ describe('Testing Identifier', () => {
     expect(identifier).toBeInstanceOf(Identifier);
   });
 
-  it('should fail creation of a new identifier if input is < 0', () => {
-    expect(() => new Identifier({ currentIdentifier: -1 })).toThrow(
-      'Invalid value for Identifier'
-    );
-  });
-
   it('should fail creation of a new identifier if input is not a positive integer', () => {
-    const values = [null, '1', 'a string', 0];
+    const values = [null, '1', 'a string', -1];
 
     values.forEach((v) => {
       expect(() => new Identifier({ currentIdentifier: v })).toThrow(
@@ -39,23 +33,5 @@ describe('Testing Identifier', () => {
     const id = new Identifier({ currentIdentifier: 10 });
 
     expect(id.getNextIdentifier()).toEqual(11);
-  });
-
-  it('should return the models`s JSON representation if toJSON is called, id null if not given', () => {
-    const id = new Identifier({ currentIdentifier: 10 });
-
-    expect(id.toJSON()).toEqual({
-      id: null,
-      currentIdentifier: 10
-    });
-  });
-
-  it('should return the models`s JSON representation if toJSON is called, id not null if given', () => {
-    const id = new Identifier({ id: '123', currentIdentifier: 10 });
-
-    expect(id.toJSON()).toEqual({
-      id: '123',
-      currentIdentifier: 10
-    });
   });
 });

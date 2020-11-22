@@ -10,11 +10,13 @@ class IdentifierRepositoryKnex {
   }
 
   async getIdentifierByUser(userId) {
-    return this.knex
+    const identifier = await this.knex
       .select()
       .from(this.identifierTable)
       .where('user_id', userId)
       .first();
+
+    return IdentifierRepositoryKnex.formatIdentifier(identifier);
   }
 
   async saveNextIdentifier(identifierInstance) {
@@ -34,7 +36,7 @@ class IdentifierRepositoryKnex {
         .where('id', identifierInstance.getId())
         .first();
 
-      return createdIdentifier;
+      return IdentifierRepositoryKnex.formatIdentifier(createdIdentifier);
     });
   }
 
@@ -54,7 +56,7 @@ class IdentifierRepositoryKnex {
         .where('id', identifierInstance.getId())
         .first();
 
-      return createdIdentifier;
+      return IdentifierRepositoryKnex.formatIdentifier(createdIdentifier);
     });
   }
 
@@ -72,8 +74,16 @@ class IdentifierRepositoryKnex {
         .where('id', identifierId)
         .first();
 
-      return createdIdentifier;
+      return IdentifierRepositoryKnex.formatIdentifier(createdIdentifier);
     });
+  }
+
+  static formatIdentifier(identifierRaw) {
+    return {
+      id: identifierRaw.id,
+      userId: identifierRaw.user_id,
+      currentIdentifier: identifierRaw.current
+    };
   }
 }
 
