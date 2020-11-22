@@ -1,0 +1,61 @@
+name: Production
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  APP_NAME: 'integer-saas'
+  AWS_DEFAULT_REGION: 'us-east-1'
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+  LAMBDA_S3_DEPLOYMENT_BUCKET: 'prod-integer-saas-state'
+  RDS_APP_USERNAME: ${{ secrets.RDS_APP_USERNAME_PROD }}
+  RDS_APP_PASSWORD: ${{ secrets.RDS_APP_PASSWORD_PROD }}
+  RDS_MASTER_USERNAME: ${{ secrets.RDS_MASTER_USERNAME_PROD }}
+  RDS_MASTER_PASSWORD: ${{ secrets.RDS_MASTER_PASSWORD_PROD }}
+  TERRAFORM_VERSION: '0.13.2'
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Create package to deploy
+        working-directory: ./
+        run: npm run build && npm run archive
+
+      - name: Install SSH Key for Terraform
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.TERRAFORM_GITHUB_SSH_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com > ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Terraform init
+        working-directory: ./infra/service
+        run: terraform init -backend-config="bucket=prod-integer-saas-state"
+        env:
+          GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=~/.ssh/known_hosts'
+
+      - name: Terraform apply
+        working-directory: ./infra/service
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_lambda_s3_deployment_bucket: ${{ env.LAMBDA_S3_DEPLOYMENT_BUCKET }}
+          TF_VAR_rds_app_username: ${{ env.RDS_APP_USERNAME }}
+          TF_VAR_rds_app_password: ${{ env.RDS_APP_PASSWORD }}
+          TF_VAR_rds_master_username: ${{ env.RDS_MASTER_USERNAME }}
+          TF_VAR_rds_master_password: ${{ env.RDS_MASTER_PASSWORD }}

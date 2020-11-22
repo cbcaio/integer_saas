@@ -7,7 +7,9 @@
     "commit": "cz",
     "lint": "eslint --fix --ext .js .",
     "unit-test:watch": "jest . --watch-all",
-    "unit-test": "jest ."
+    "unit-test": "jest .",
+    "build": "cp package.json package-lock.json ./dist && cp -r ./src ./dist && cd ./dist && npm install --production && rm package.json package-lock.json",
+    "archive": "cd ./dist && zip -r ../infra/service/service-api.zip ."
   },
   "repository": {
     "type": "git",
@@ -42,6 +44,7 @@
     "express": "^4.17.1",
     "knex": "^0.21.12",
     "luxon": "^1.25.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "serverless-http": "^2.6.0"
   }
 }

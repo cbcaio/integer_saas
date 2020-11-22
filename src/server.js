@@ -1,7 +1,7 @@
-const app = require('./application/app');
+const createApp = require('./application/app');
 
 const port = 3000;
 
-app.listen(port, () => {
+createApp().listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
