@@ -31,9 +31,11 @@ class Identifier {
     return nextIdentifier;
   }
 
-  static validateIdentifier(id) {
-    if (!Number.isInteger(id)) {
-      throw new Error('Invalid value for Identifier');
+  static validateIdentifier(value) {
+    if (!Number.isInteger(value) || value < 0) {
+      throw new Error(
+        'Invalid value for Identifier: Must be a positive integer'
+      );
     }
   }
 }

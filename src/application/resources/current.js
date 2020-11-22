@@ -13,16 +13,40 @@ router.get('/current', async (req, res) => {
   res.status(200).json({ identifier: currentIdentifier });
 });
 
-router.put('/current', async (req, res) => {
-  const userId = req.authenticatedUser.id;
-  const { current } = req.body;
+router.put(
+  '/current',
+  function validateRequest(req, res, next) {
+    try {
+      const { current } = req.body;
 
-  const currentIdentifier = await identifierServices.setCurrentUserIdenfifier(
-    userId,
-    current
-  );
+      if (!current) {
+        throw new Error('current is required');
+      }
 
-  res.status(200).json({ identifier: currentIdentifier });
-});
+      if (!Number.isInteger(current) || current < 0) {
+        throw new Error('current value must be a positive integer');
+      }
+
+      next();
+    } catch (e) {
+      next(e);
+    }
+  },
+  async (req, res, next) => {
+    try {
+      const userId = req.authenticatedUser.id;
+      const { current } = req.body;
+
+      const currentIdentifier = await identifierServices.setCurrentUserIdenfifier(
+        userId,
+        current
+      );
+
+      res.status(200).json({ identifier: currentIdentifier });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
 
 module.exports = router;
