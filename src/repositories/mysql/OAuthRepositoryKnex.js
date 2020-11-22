@@ -1,5 +1,3 @@
-const OAuthToken = require('../domainModels/OAuthToken');
-
 class OAuthRepositoryKnex {
   constructor(knexInstance) {
     if (!knexInstance) {
@@ -31,22 +29,7 @@ class OAuthRepositoryKnex {
       return false;
     }
 
-    return new OAuthToken({
-      id: token.id,
-      token: {
-        accessToken: token.access_token,
-        accessTokenExpiresAt: token.access_token_expires_at,
-        refreshToken: token.refresh_token,
-        refreshTokenExpiresAt: token.refresh_token_expires_at
-      },
-      client: {
-        id: token.client_id
-      },
-
-      user: {
-        id: token.user_id
-      }
-    });
+    return OAuthRepositoryKnex.formatToken(token);
   }
 
   async getClient(clientId, clientSecret) {
@@ -72,12 +55,13 @@ class OAuthRepositoryKnex {
     const token = await this.knex
       .table(this.tokensTable)
       .select([
+        'id',
+        'user_id',
+        'client_id',
         'access_token',
         'access_token_expires_at',
-        'client_id',
         'refresh_token',
-        'refresh_token_expires_at',
-        'user_id'
+        'refresh_token_expires_at'
       ])
       .where('refresh_token', bearerToken)
       .first();
@@ -86,26 +70,38 @@ class OAuthRepositoryKnex {
       return false;
     }
 
-    return token;
+    return OAuthRepositoryKnex.formatToken(token);
   }
 
-  async saveAccessToken(token, client, user) {
-    const oAuthToken = new OAuthToken({
-      token,
-      client,
-      user
-    });
-
+  async saveAccessToken(oAuthTokenInstance) {
     return this.knex
       .insert({
-        access_token: oAuthToken.getAccessToken(),
-        access_token_expires_at: oAuthToken.getAccessTokenExpiresAt(),
-        client_id: oAuthToken.getClientId(),
-        refresh_token: oAuthToken.getRefreshToken(),
-        refresh_token_expires_at: oAuthToken.getRefreshTokenExpiresAt(),
-        user_id: oAuthToken.getUserId()
+        access_token: oAuthTokenInstance.getAccessToken(),
+        access_token_expires_at: oAuthTokenInstance.getAccessTokenExpiresAt(),
+        client_id: oAuthTokenInstance.getClientId(),
+        refresh_token: oAuthTokenInstance.getRefreshToken(),
+        refresh_token_expires_at: oAuthTokenInstance.getRefreshTokenExpiresAt(),
+        user_id: oAuthTokenInstance.getUserId()
       })
       .into(this.tokensTable);
+  }
+
+  static formatToken(queryResponse) {
+    return {
+      id: queryResponse.id,
+      token: {
+        accessToken: queryResponse.access_token,
+        accessTokenExpiresAt: queryResponse.access_token_expires_at,
+        refreshToken: queryResponse.refresh_token,
+        refreshTokenExpiresAt: queryResponse.refresh_token_expires_at
+      },
+      client: {
+        id: queryResponse.client_id
+      },
+      user: {
+        id: queryResponse.user_id
+      }
+    };
   }
 }
 

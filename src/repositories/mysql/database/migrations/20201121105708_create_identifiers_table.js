@@ -6,7 +6,7 @@ exports.up = function (knex) {
 
     table.increments();
     table.integer('user_id').unsigned().notNullable().unique();
-    table.bigInteger('current').notNullable();
+    table.bigInteger('current').unsigned().notNullable();
 
     table.foreign('user_id').references('id').inTable('users');
   });

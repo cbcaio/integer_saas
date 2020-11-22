@@ -1,4 +1,4 @@
-const { DB_CONNECTION_STRING } = require('../envConfig');
+const { DB_CONNECTION_STRING } = require('../../../envConfig');
 
 const connectionParameters = {
   client: 'mysql',

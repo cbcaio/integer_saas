@@ -1,6 +1,6 @@
 const IdentifierRepositoryKnex = require('./IdentifierRepositoryKnex');
-const User = require('../domainModels/User');
-const Identifier = require('../domainModels/Identifier');
+const User = require('../../domainModels/User');
+const Identifier = require('../../domainModels/Identifier');
 
 beforeEach(() => {
   jest.clearAllMocks();

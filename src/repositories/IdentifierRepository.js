@@ -43,6 +43,18 @@ class IdentifierRepository {
       currentIdentifier: rawIdentifier.current
     });
   }
+
+  async saveNextIdentifier(identifierInstance) {
+    const rawIdentifier = await this.queryBuilder.saveNextIdentifier(
+      identifierInstance
+    );
+
+    return new this.IdentifierModel({
+      id: rawIdentifier.id,
+      userId: rawIdentifier.user_id,
+      currentIdentifier: rawIdentifier.current
+    });
+  }
 }
 
 module.exports = IdentifierRepository;
