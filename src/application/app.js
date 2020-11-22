@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const resources = require('./resources');
-const errorHandlerMiddleware = require('./errorHandlerMiddleware');
+const errorHandlerMiddleware = require('../middlewares/errorHandlerMiddleware');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 const app = express();
