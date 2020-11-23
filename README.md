@@ -5,7 +5,7 @@
 
 ### Date
 
-23/11/2020
+22/11/2020
 
 ### Location of deployed application
 
@@ -18,6 +18,7 @@ API URL: https://8k670x86l6.execute-api.us-east-1.amazonaws.com/v1
 | PUT    | /current       | { "current": 123123}                            |
 | GET    | /next          | NA                                              |
 
+Resources `/current` and `/next` are protected and will only accept requests containing Authorization Header with Bearer token
 
 ### Time spent
 
@@ -60,6 +61,7 @@ Sorry took longer than expected. I did not notice today is the 6th day and not t
 To run locally:
 
 1 - Clone repository
+
 2 - Inside cloned folder run:
 
 ```console
@@ -68,14 +70,14 @@ To run locally:
 
 Now you are able to access the API using the URL http://localhost:3000 
 
-But to start interacting with the api we need to setup the database:
+Before interacting with the api we need to run database migrations:
 
 ```console
   export DB_CONNECTION_STRING=mysql://root:root@localhost:3306/integer_saas
   npm run migrate
 ``` 
 
-Now you can start registering your user through the POST http://localhost:3000/auth/register endpoint with a payload such as
+Now you can start registering your user through the POST /auth/register endpoint with a payload such as
 
 ```JSON
 {
@@ -88,6 +90,7 @@ Now you can start registering your user through the POST http://localhost:3000/a
 #### To run unit tests locally:
 
 1 - Clone repository
+
 2 - Inside cloned folder run:
 
 ```console
@@ -121,6 +124,10 @@ Dependencies are supposed to work from 1 -> 6, meaning 3 can depend on 4, but no
   - infrastructure as code with terraform
   - using containers with docker
   - continuous integration / deployment with github actions
+
+Postman Collection link to make it easier to use API:
+
+https://www.getpostman.com/collections/71b0f70ea693ff3ba2f3 (just need to set `server` variable to be equal the API URL and the Bearer token)
 
 ### Your feedback on this technical challenge
 
