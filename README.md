@@ -21,23 +21,27 @@ API URL: https://8k670x86l6.execute-api.us-east-1.amazonaws.com/v1
 
 ### Time spent
 
-start date: 17/12 at 7pm  -> total 3h
-date: 18/12               -> + total 3h
-date: 19/12               -> + total 4h
-date: 20/12               -> + total 2h
-date: 21/12               -> + total 4h
-date: 22/12               -> + total 6h
+| Date  | TimeSpent |
+| ----- | --------- |
+| 17/11 | 3h        |
+| 18/11 | 3h        |
+| 19/11 | 3h        |
+| 20/11 | 4h        |
+| 21/11 | 2h        |
+| 22/12 | 4h        |
+| Total | ~21h      |
 
-Total spent: approximately 22h
+Sorry took longer than expected. I did not notice today is the 6th day and not the 5th.
 
 ### Assumptions made
 
 - Did not know if there was any cost limitation
   - Consequence: Used RDS with mysql
 - Did not know about scalability requirements
-  - Consequence: Used lambda, but decided for a mixed approach with express framework (makes it easy to swap to non-serverless)
-- Assumed there could be concurrency asking for identifiers
+  - Consequence: Used lambda, but decided for a mixed approach with express framework (makes it easy to swap to non-serverless if needed)
+- Assumed there could be problems with concurrency
   - Consequence: Created simple retry rule to improve experience and always look for latest next identifier
+- Thinking about mimicking the real world, I wanted have a CI/CD in place, so I used github actions and also IaC with Terraform in order to make the project easier to maintain and deploy
 
 
 ### Shortcuts/Compromises made
@@ -49,8 +53,7 @@ Total spent: approximately 22h
 ### Stretch goals attempted
 
 - Deployed API on AWS, using Infrastructed as Code with Terraform
-- Wanted to finish OAuth implementation, but I used too much time with code refactoring and iac
-- Unfortuately I didn't even start the UI. I wanted to add a simple React component but didn't want to use more than 5 days
+- Wanted to finish OAuth implementation, but I used too much time with code refactoring and iac. What I did was to prepare for receiving OAuthClients but did not finish
   
 ### Instructions to run assignment locally
 
@@ -95,6 +98,7 @@ Now you can start registering your user through the POST http://localhost:3000/a
 
 - I know enough of React to make a simple UI but I didn't find the time to do it
 - I was not sure if API Key meant the access token or it was an api key + access token, so I added an api key using api gateway and implemented authentication on the application with the access token.
+- Did not setup Route 53, I did not have a domain under my name or a certificate
 
 ### Other information about your submission that you feel it's important that we know if applicable.
 
@@ -116,6 +120,7 @@ Dependencies are supposed to work from 1 -> 6, meaning 3 can depend on 4, but no
   - unit tests organization
   - infrastructure as code with terraform
   - using containers with docker
+  - continuous integration / deployment with github actions
 
 ### Your feedback on this technical challenge
 
