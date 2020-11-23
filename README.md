@@ -19,6 +19,7 @@ API URL: https://8k670x86l6.execute-api.us-east-1.amazonaws.com/v1
 | GET    | /next          | NA                                              |
 
 Resources `/current` and `/next` are protected and will only accept requests containing Authorization Header with Bearer token
+All endpoints require a header `x-api-key` to be accessed, this key will be provided and not pasted here for security reasons. 
 
 ### Time spent
 
