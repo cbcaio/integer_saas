@@ -11,7 +11,7 @@ terraform {
 }
 
 locals {
-  db_connection_string  = "mysql://${var.rds_app_username}:${var.rds_app_password}@${aws_db_instance.default.endpoint}/${aws_db_instance.default.name}"
+  db_connection_string  = "mysql://${var.rds_master_username}:${var.rds_master_password}@${aws_db_instance.default.endpoint}/${aws_db_instance.default.name}"
   lambda_zip_path       =   "${path.module}/service-api.zip"
 }
 
