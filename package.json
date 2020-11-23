@@ -8,7 +8,7 @@
     "lint": "eslint --fix --ext .js .",
     "unit-test:watch": "jest . --watch-all",
     "unit-test": "jest .",
-    "build": "mkdir ./dist && cp package.json package-lock.json ./dist && cp -r ./src ./dist && cd ./dist && npm install --production && rm package.json package-lock.json",
+    "build": "mkdir -p ./dist && cp package.json package-lock.json ./dist && cp -r ./src ./dist && cd ./dist && npm install --production && rm package.json package-lock.json",
     "archive": "cd ./dist && zip -r ../infra/service/service-api.zip ."
   },
   "repository": {
