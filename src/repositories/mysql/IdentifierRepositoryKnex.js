@@ -16,7 +16,9 @@ class IdentifierRepositoryKnex {
       .where('user_id', userId)
       .first();
 
-    return IdentifierRepositoryKnex.formatIdentifier(identifier);
+    return identifier
+      ? IdentifierRepositoryKnex.formatIdentifier(identifier)
+      : false;
   }
 
   async saveNextIdentifier(identifierInstance) {

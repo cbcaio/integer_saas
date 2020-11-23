@@ -3,14 +3,18 @@ const express = require('express');
 const router = express.Router();
 const { identifierServices } = require('../../services');
 
-router.get('/current', async (req, res) => {
-  const userId = req.authenticatedUser.id;
+router.get('/current', async (req, res, next) => {
+  try {
+    const userId = req.authenticatedUser.id;
 
-  const currentIdentifier = await identifierServices.getCurrentUserIdenfifier(
-    userId
-  );
+    const currentIdentifier = await identifierServices.getCurrentUserIdenfifier(
+      userId
+    );
 
-  res.status(200).json({ identifier: currentIdentifier });
+    res.status(200).json({ identifier: currentIdentifier });
+  } catch (e) {
+    next(e);
+  }
 });
 
 router.put(

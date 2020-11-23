@@ -14,10 +14,7 @@ module.exports = function createApp() {
   app.use('/auth', resources.registerResourceRouter);
 
   app.use(authMiddleware);
-  app.use('/v1', [
-    resources.nextResourceRouter,
-    resources.currentResourceRouter
-  ]);
+  app.use('/', [resources.nextResourceRouter, resources.currentResourceRouter]);
 
   app.use(errorHandlerMiddleware);
 
