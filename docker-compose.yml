@@ -1,0 +1,29 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7.21
+    command: mysqld --sql_mode=""
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: integer_saas
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+
+  app:
+    environment:
+      DB_CONNECTION_STRING: 'mysql://root:root@mysql:3306/integer_saas'
+    command: npm run start
+    ports:
+      - '3000:3000'
+    build:
+      context: ./
+      dockerfile: default.Dockerfile
+    volumes:
+      - ./:/var/app
+      - /var/app/node_modules
+      - /var/app/coverage
+      - /var/app/logs
+    links:
+      - 'mysql:mysql-docker'

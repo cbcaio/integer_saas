@@ -9,7 +9,9 @@
     "unit-test:watch": "jest . --watch-all",
     "unit-test": "jest .",
     "build": "mkdir -p ./dist && cp package.json package-lock.json ./dist && cp -r ./src ./dist && cd ./dist && npm install --production && rm package.json package-lock.json",
-    "archive": "cd ./dist && zip -r ../infra/service/service-api.zip ."
+    "archive": "cd ./dist && zip -r ../infra/service/service-api.zip .",
+    "migrate": "cd ./src/repositories/mysql/database && knex migrate:latest",
+    "start": "node src/server"
   },
   "repository": {
     "type": "git",
