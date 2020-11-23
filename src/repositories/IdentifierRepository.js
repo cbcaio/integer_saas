@@ -18,7 +18,9 @@ class IdentifierRepository {
     const identifier = await this.queryBuilder.getIdentifierByUser(userId);
 
     if (!identifier) {
-      return false;
+      const newIdentifier = this.makeIdentifier({ userId });
+
+      return this.saveIdentifier(newIdentifier);
     }
 
     const identifierModel = new this.IdentifierModel({ ...identifier });
